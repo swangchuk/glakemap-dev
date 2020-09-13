@@ -1,4 +1,4 @@
-**Steps to use #glakemap# package for glacial lake mapping**
+# Steps to use glakemap package for glacial lake mapping
 
 1) Make glakemap package (..\..\glakemap-dev\glakemap) the current working directory.
 
