@@ -1,27 +1,20 @@
 
 # -------------------Process S1 Data-----------------------#
-from sentinel1.s1processor import SARDataOperators
-
 
 import time
 start_time = time.time()
-
+from dirext.dirextmngmt import DirMngmt
 from sentinel1.s1processor import ProcessSARData
-
-from dirext.maindir import main_directory
-main_directory = main_directory()
+from sentinel1.s1processor import Reprojections
+from sentinel1.s1processor import MosaicDatastet
+dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
+directory = DirMngmt(dir_path, '', '','')
+main_directory = directory.main_direc()
 print(main_directory)
 
 
 
-from s1processor import ProcessSARData
-from s1processor import Reprojections
-from s1processor import MosaicDatastet
-main_directory = main_directory()
-
-
-
-band_polarisation = ['VV'] # band polarization to be processed
+band_polarisation = ['VV'] # Add the band polarisation to be processed. Also supports multi-polarisation e.g. ['VV', 'VH']
 process_data = ProcessSARData(main_directory, "Sentinel1", "s1_unziped_data", 's1_processed_data', ".zip", ".safe", band_polarisation)
 process_data.makefolders()                   
 process_data.unzipfiles()
@@ -29,21 +22,21 @@ process_data.process_sar_data()
 
 
 
-from spatialref import SpatialReference
+from sptref.spatialref import SpatialReference
 spatial_ref = SpatialReference()
 gcs = spatial_ref.gcs(4326)
 pcs = spatial_ref.pcs(32645)
-processed_band_pol2 = ['_VV_db.img']
+processed_band_pol2 = ['_VV_db.img'] # Add the band polarisation to be processed. Also supports multi-polarisation e.g. ['_VV_db.img', '_VH_db.img']
 repro = Reprojections(main_directory, "Sentinel1", "s1_unziped_data", 's1_processed_data', '', '', processed_band_pol2, gcs)
 repro.reprojection()
 
 
 
-from spatialref import SpatialReference
+from sptref.spatialref import SpatialReference
 spatial_ref = SpatialReference()
 gcs = spatial_ref.gcs(4326)
 pcs = spatial_ref.pcs(32645)
-filter_dB = ['*_VV_db_COPY.tif']
+filter_dB = ['*_VV_db_COPY.tif'] # Add the band polarisation to be processed. Also supports multi-polarisation e.g. ['*_VV_db_COPY.tif', '*_VH_db_COPY.tif']
 mosaic_data = MosaicDatastet(main_directory, "Sentinel1", "s1_unziped_data", 's1_processed_data', '', '', filter_dB, gcs)
 mosaic_data.makefolders()
 mosaic_data.mosaic()
@@ -54,13 +47,17 @@ mosaic_data.mosaic()
 
 import os
 import time
-from maindir import main_directory
-from s2processor import CalculateNDWI
-from s2processor import MosaicNDWIData
-from spatialref import SpatialReference
-main_directory = main_directory()
+from sentinel2.s2processor import CalculateNDWI
+from sentinel2.s2processor import MosaicNDWIData
+from sptref.spatialref import SpatialReference
+
+dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
+from dirext.dirextmngmt import DirMngmt
+directory = DirMngmt(dir_path, '', '','')
+main_directory = directory.main_direc()
 print(main_directory)
 os.listdir(main_directory)
+
 start_time = time.time()
 
 
@@ -88,28 +85,29 @@ print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start
 # -------------------Process Dem Data-----------------------#
 
 import os
-from maindir import main_directory
-main_directory = main_directory()
+dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
+from dirext.dirextmngmt import DirMngmt
+directory = DirMngmt(dir_path, '', '','')
+main_directory = directory.main_direc()
 print(main_directory)
 os.listdir(main_directory)
 
 
-
-from demprocessor import MoveDemFiles
+from dem.demprocessor import MoveDemFiles
 move_files = MoveDemFiles(main_directory, "Dem", "dem_unziped_data", 'dem_processed_data', ".zip", ".hgt", '')
 src_dir = r'C:\\Users\\Sonam\\.snap\\auxdata\\dem\\SRTM 1Sec HGT'
 move_files.move_over(src_dir, 'test')
 
 
 
-from demprocessor import DemProcessor
-from spatialref import SpatialReference
+from dem.demprocessor import DemProcessor
+from sptref.spatialref import SpatialReference
 spatial_ref = SpatialReference()
 gcs = spatial_ref.gcs(4326)
 pcs = spatial_ref.pcs(32645)
 
 dem = DemProcessor(main_directory, "Dem", "dem_unziped_data", 'dem_processed_data', ".zip", ".hgt", '')
-# dem.unzipfiles()
+dem.unzipfiles()
 dem.makefolders()
 dem.mosaic_dem_cal_slp('SRTM1_GDB.gdb', 'SRTM1_Mosaic', 'SRTM1_Mosaiced.tif', gcs, 'SRTM1_Slope', 'SRTM1_Slope.tif', 0.00001036)
 

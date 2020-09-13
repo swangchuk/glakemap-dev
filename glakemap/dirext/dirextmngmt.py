@@ -20,7 +20,7 @@ class DirMngmt(object):
 
 
 
-    def main_directory(self):
+    def main_direc(self):
 
         return self.main_dir
 

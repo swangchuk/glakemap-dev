@@ -19,7 +19,7 @@ print('Loading module done! ^__^\n')
 
 # Import user defined modules-----------------------
 
-from dirextmngmt import FileExtMngmt
+from dirext.dirextmngmt import FileExtMngmt
 
 # Load operators and Java HashMap
 GPF.getDefaultInstance().getOperatorSpiRegistry().loadOperatorSpis()

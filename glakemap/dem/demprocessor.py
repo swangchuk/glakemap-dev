@@ -13,7 +13,7 @@ from arcpy.sa import *
 print('Loading module done! ^__^\n')
 
 
-from dirextmngmt import FileExtMngmt
+from dirext.dirextmngmt import FileExtMngmt
 
 
 
