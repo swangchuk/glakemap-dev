@@ -112,6 +112,7 @@ dem.makefolders()
 dem.mosaic_dem_cal_slp('SRTM1_GDB.gdb', 'SRTM1_Mosaic', 'SRTM1_Mosaiced.tif', gcs, 'SRTM1_Slope', 'SRTM1_Slope.tif', 0.00001036)
 
 
+
 # -------------------Rule-based ImgSeg-----------------------#
 
 
