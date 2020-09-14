@@ -26,17 +26,40 @@ GPF.getDefaultInstance().getOperatorSpiRegistry().loadOperatorSpis()
 
 
 
-def read_data(filename):
-    return ProductIO.readProduct(filename)
-
-
-
-def Write_Tif(product, filename):
-    ProductIO.writeProduct(product, filename, "GeoTIFF")
-
-
-
 class CalculateNDWI(FileExtMngmt):
+
+
+    @staticmethod
+    def read_data(filename):
+        return ProductIO.readProduct(filename)
+
+
+    @staticmethod
+    def write_tif(product, filename):
+        ProductIO.writeProduct(product, filename, "GeoTIFF")
+
+
+    
+    @staticmethod
+    def calculate_ndwi_blue(data, band_names):
+        "Calculates Normalized Difference Water Index (NDWI) using blue and near-infrared bands"
+        parameters = HashMap()
+        parameters.put('greenSourceBand', band_names[1]) # greenSourceBand is Blueband (B2) here!
+        parameters.put('nirSourceBand', band_names[7]) # NIR {Blue-NIR/Blue+NIR}
+        parameters.put('resampleType', 'Highest resolution') # In case the resolution of the raster does not match
+        return GPF.createProduct("Ndwi2Op", parameters,data)
+    
+                
+    
+    @staticmethod
+    def calculate_ndwi_green(data, band_names):
+        "Calculates Normalized Difference Water Index (NDWI) using green and near-infrared bands"
+        parameters = HashMap()
+        parameters.put('greenSourceBand', band_names[2]) # Green
+        parameters.put('nirSourceBand', band_names[7]) # NIR {Green-NIR/Green+NIR}
+        parameters.put('resampleType','Highest resolution') # In case the resolution of the raster does not match
+        return GPF.createProduct("Ndwi2Op", parameters, data)
+
 
 
     def calculate_ndwi(self):   
@@ -47,7 +70,8 @@ class CalculateNDWI(FileExtMngmt):
                     file_name = os.path.join(r, file)
                     # Read data
                     print('Reading {} of {}...\n'.format(file, f))
-                    product = read_data(file_name)
+                    # product = read_data(file_name)
+                    product = CalculateNDWI.read_data(file_name)
                     # Product properties
                     band_names = product.getBandNames()
                     width = product.getSceneRasterWidth()
@@ -62,56 +86,30 @@ class CalculateNDWI(FileExtMngmt):
                     print('Start time: ' +  str(product.getStartTime()))
                     print('End time: ' +  str(product.getEndTime()))
                     
-
-                    # Calculates Normalized Difference Water Index (NDWI) using blue and near-infrared bands
-                    def calculate_ndwi_blue(data):
-                        parameters = HashMap()
-                        parameters.put('greenSourceBand', band_names[1]) # greenSourceBand is Blueband (B2) here!
-                        parameters.put('nirSourceBand', band_names[7]) # NIR {Blue-NIR/Blue+NIR}
-                        parameters.put('resampleType', 'Highest resolution') # In case the resolution of the raster does not match
-                        return GPF.createProduct("Ndwi2Op", parameters,data)
-                    
-                                
-                    # Calculates Normalized Difference Water Index (NDWI) using green and near-infrared bands
-                    def calculate_ndwi_green(data):
-                        parameters = HashMap()
-                        parameters.put('greenSourceBand', band_names[2]) # Green
-                        parameters.put('nirSourceBand', band_names[7]) # NIR {Green-NIR/Green+NIR}
-                        parameters.put('resampleType','Highest resolution') # In case the resolution of the raster does not match
-                        return GPF.createProduct("Ndwi2Op", parameters,data)
-
-
                     # Path to a directory and make a new folder (File_Name)
                     file_name = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_3, name[-27:-7] + '_NDWI_Blue')
                     if not os.path.exists(file_name):
                         os.makedirs(file_name)
                     print('Result directory {}'.format(file_name))
                     output_dir = os.path.join(file_name, name[-27:-7] + '_NDWI_Blue') # Name of the product 
-
                     # Computes NDWI blue
                     print('Computing NDWI Blue...')
-                    ndwi_blue = calculate_ndwi_blue(product)
+                    ndwi_blue = CalculateNDWI.calculate_ndwi_blue(product, band_names)
                     ProductUtils.copyGeoCoding(product, ndwi_blue)
-
                     print ('Writing NDWI Blue...')
-                    #Write product into a specified directory
-                    Write_Tif(ndwi_blue, output_dir)
-
+                    # Write product into a specified directory
+                    CalculateNDWI.write_tif(ndwi_blue, output_dir)
                     # Path to a directory and make a new folder (File_Name)
                     file_name = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_3, name[-27:-7] + '_NDWI_Green')
                     if not os.path.exists(file_name):
                         os.makedirs(file_name)
                     print('Result directory {}'.format(file_name))
                     output_dir = os.path.join(file_name, name[-27:-7] + '_NDWI_Green') # Name of the product 
-
-                    # Computes NDWI Green
                     print('Computing NDWI Green...')
-                    ndwi_green = calculate_ndwi_green(product)
+                    ndwi_green = CalculateNDWI.calculate_ndwi_green(product, band_names)
                     ProductUtils.copyGeoCoding(product, ndwi_green)
-
                     print('Writing NDWI Green...\n')
-                    # Write product into a specified directory
-                    Write_Tif(ndwi_green, output_dir)
+                    CalculateNDWI.write_tif(ndwi_green, output_dir)
 
 
 
