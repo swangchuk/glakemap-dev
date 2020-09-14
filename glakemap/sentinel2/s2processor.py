@@ -60,6 +60,7 @@ class CalculateNDWI(FileExtMngmt):
         parameters.put('resampleType','Highest resolution') # In case the resolution of the raster does not match
         return GPF.createProduct("Ndwi2Op", parameters, data)
 
+    
 
 
     def calculate_ndwi(self):   
@@ -168,7 +169,6 @@ class MosaicNDWIData(FileExtMngmt):
                                                     "UPDATE_CELL_SIZES","UPDATE_BOUNDARY","NO_OVERVIEWS","2","#","#",'#', filters_new, "SUBFOLDERS",\
                                                     "EXCLUDE_DUPLICATES","NO_PYRAMIDS","NO_STATISTICS","NO_THUMBNAILS","#","NO_FORCE_SPATIAL_REFERENCE")
             print('Done! ^_^')
-            
             
             # 4) Creates a folder to copy NDWI mosaiced dataset
             in_raster = os.path.join(in_workspace, in_mosaicdataset_name)

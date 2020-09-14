@@ -114,8 +114,45 @@ dem.mosaic_dem_cal_slp('SRTM1_GDB.gdb', 'SRTM1_Mosaic', 'SRTM1_Mosaiced.tif', gc
 
 
 # -------------------Rule-based ImgSeg-----------------------#
+import os
+dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
+from dirext.dirextmngmt import DirMngmt
+directory = DirMngmt(dir_path, '', '','')
+main_directory = directory.main_direc()
+print(main_directory)
+os.listdir(main_directory)
+
+from imgseg.imgseg import ReadDatasets
+from imgseg.imgseg import Thresholds
+from imgseg.imgseg import RuleBasedSegmentation
+
+data = ReadDatasets(main_directory, "rule-imgseg", "", "", "", "", "")
+data.makefolders()
+def reading_data(file_exten):
+       try:
+              return data.read_data(file_exten)
+              
+       except UnboundLocalError:
+              print("------------> {} File NOT found!\n".format(file_exten))
 
 
+sar_data = reading_data('_VV.tif')
+ndwi_blue_data = reading_data('NDWI_Mosaiced_Blue.tif')
+ndwi_green_data = reading_data('NDWI_Mosaiced_Green.tif')
+
+# slope_data = reading_data('Resam_SRTM1_Slope.tif')
+
+thresh = Thresholds()
+
+ndwi_bluet = thresh.threshold(0.5)
+ndwi_green_t1 = thresh.threshold(0.3)
+ndwi_green_t2 = thresh.threshold(0.05)
+backscattert = thresh.threshold(-14.0)
+
+ruleimgseg = RuleBasedSegmentation(main_directory, "rule-imgseg", "raster2polygon", "")
+ruleimgseg.makefolders()
+ruleimgseg.rule_based_imgseg('Glacial_Lakes_Segmented.tif', ndwi_blue_data, ndwi_green_data, sar_data,
+ndwi_bluet, ndwi_green_t1, ndwi_green_t2, backscattert)
 
 
 
