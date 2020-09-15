@@ -18,6 +18,7 @@ from dirext.dirextmngmt import DirMngmt
 from dirext.dirextmngmt import FileExtMngmt
 
 
+
 class ReadDatasets(FileExtMngmt):
 
 
@@ -58,11 +59,53 @@ class Thresholds():
 class RuleBasedSegmentation(DirMngmt):
 
 
+
+    def __init__(self, main_dir, subfolder_1, subfolder_2, subfolder_3, proj_pcs, proj_gcs):
+        super(RuleBasedSegmentation, self).__init__(main_dir, subfolder_1, subfolder_2, subfolder_3)
+        self.proj_pcs = proj_pcs
+        self.proj_gcs = proj_gcs
+
+
+
     @staticmethod
     def raster2polygon(raster_name, outPolygon):
         field = "VALUE"
         ras2poly = arcpy.RasterToPolygon_conversion(raster_name, outPolygon, "SIMPLIFY", field)
         return ras2poly
+
+
+
+    @staticmethod
+    def add_polygon_attributes(file_path, pcs_code, gcs_code):
+        properties = "AREA"
+        length_unit = "KILOMETERS"
+        area_unit = "SQUARE_KILOMETERS"
+        coordinate_system = pcs_code
+        properties_1 = "CENTROID"
+        properties_2 = 'PERIMETER_LENGTH'
+        print('Adding X,Y coordinates into the attribute table...')
+        arcpy.AddGeometryAttributes_management(file_path, properties_1, length_unit, area_unit, gcs_code)
+        print('Adding parimeter of a polygon into the attribute table...')
+        arcpy.AddGeometryAttributes_management(file_path, properties_2, length_unit, area_unit, coordinate_system)
+        # Generate the extent coordinates using Add Geometry Properties tool
+        print('Calculating area and adding area into the attribute table...')
+        arcpy.AddGeometryAttributes_management(file_path, properties, length_unit, area_unit, coordinate_system)
+        #coordinate_system_coord = GCS
+        DropField = 'gridcode' #Delete gridcode from the attribute table
+        print('Deleting gridcode field from the table...')
+        arcpy.DeleteField_management(file_path, DropField)
+
+
+    @staticmethod
+    def select_featureby_size(file_path):
+        file_dir = os.path.split(file_path)[0]
+        feature = os.path.join(file_dir, 'RasterToPolygon_Select.shp')
+        where_clause = 'POLY_AREA>=0.01' #Select area greter than 0.01 km2
+        # Execute Select
+        print('Extracting areas larger than 0.01 km2...')
+        arcpy.Select_analysis(file_path, feature, where_clause)
+        return feature
+
 
 
     def rule_based_imgseg(self, filename, ndwi_blue, ndwi_green, backscatter, bluet, greent1, greent2, rbt):
@@ -78,22 +121,28 @@ class RuleBasedSegmentation(DirMngmt):
 
         arcpy.CheckOutExtension("spatial")
         arcpy.env.overwriteOutput = True
-
+        """
         imseg = Con((self.ndwi_blue>=self.bluet) & (self.ndwi_blue<= 0.95), 1,
                 Con((self.ndwi_green>=self.greent1) & (self.backscatter<=self.rbt), 1,\
                 Con((self.ndwi_green>=self.greent2) & (self.backscatter<=self.rbt), 1,
                 Con((self.backscatter<=self.rbt), 2))))
         
-    
+        """
         save_result = os.path.join(self.main_dir, self.subfolder_1, self.filename)
         print('save_result', save_result)
         print('Segmenting image..... ^_^')
-        imseg.save(save_result)
+        # imseg.save(save_result)
 
         outPolygon = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_2, 'RasterToPolygon.shp')
         print('outPolygon', outPolygon)
-        RuleBasedSegmentation.raster2polygon(save_result, outPolygon)
+        # RuleBasedSegmentation.raster2polygon(save_result, outPolygon)
         print('Converting {} to raster done!'.format(outPolygon))
+
+        outProjectData = os.path.join(os.path.split(outPolygon)[0], 'RasterToPolygon_TM.shp')
+        print("OutProjectData", outProjectData)
+    
+        # RuleBasedSegmentation.add_polygon_attributes(outProjectData, self.proj_pcs, self.proj_gcs)
+        feature = RuleBasedSegmentation.select_featureby_size(outProjectData)
         
 
 

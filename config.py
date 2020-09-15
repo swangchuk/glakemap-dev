@@ -125,6 +125,8 @@ os.listdir(main_directory)
 from imgseg.imgseg import ReadDatasets
 from imgseg.imgseg import Thresholds
 from imgseg.imgseg import RuleBasedSegmentation
+from sptref.spatialref import SpatialReference as spt
+
 
 data = ReadDatasets(main_directory, "rule-imgseg", "", "", "", "", "")
 data.makefolders()
@@ -149,7 +151,9 @@ ndwi_green_t1 = thresh.threshold(0.3)
 ndwi_green_t2 = thresh.threshold(0.05)
 backscattert = thresh.threshold(-14.0)
 
-ruleimgseg = RuleBasedSegmentation(main_directory, "rule-imgseg", "raster2polygon", "")
+
+ruleimgseg = RuleBasedSegmentation(main_directory, "rule-imgseg", "raster2polygon", "", spt.pcs(32645), spt.gcs(4326))
+
 ruleimgseg.makefolders()
 ruleimgseg.rule_based_imgseg('Glacial_Lakes_Segmented.tif', ndwi_blue_data, ndwi_green_data, sar_data,
 ndwi_bluet, ndwi_green_t1, ndwi_green_t2, backscattert)
