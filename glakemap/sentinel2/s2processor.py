@@ -62,7 +62,6 @@ class CalculateNDWI(FileExtMngmt):
 
     
 
-
     def calculate_ndwi(self):   
         for r, d, f in os.walk(os.path.join(self.main_dir, self.subfolder_1)):
             for file in f:
@@ -179,3 +178,88 @@ class MosaicNDWIData(FileExtMngmt):
             out_raster = os.path.join(ndwi, mosaiced_raster_name)
             arcpy.CopyRaster_management(in_raster, out_raster,"#","0","0","NONE","NONE","32_BIT_FLOAT","NONE","NONE")
             print('Done! ^_^ ^_^ ^_^')
+
+
+
+class MosaicS2Data(FileExtMngmt):
+
+
+    @staticmethod
+    def create_gdb(path, gdb_name):
+        """Creates an empty geodatabase file"""
+        gdb_file = arcpy.CreateFileGDB_management(path, gdb_name) # Creates gdb file
+        return gdb_file
+
+
+    @staticmethod
+    def create_empty_mosaic_dataset(in_workspace, in_mosaicdataset_name, gcs):
+        """Creates an empty mosaic dataset"""
+        NumberOfBand = "1"
+        PixelType = "32_BIT_FLOAT" # Pixel type can be changed
+        product_definition = "NONE"
+        Wavelength = ""
+        md = arcpy.CreateMosaicDataset_management(in_workspace,in_mosaicdataset_name, gcs, NumberOfBand, PixelType, product_definition, Wavelength)
+        return md
+
+
+    @staticmethod
+    def add_ras2_empty_mosaic_dataset(in_mosaic_dataset, input_path, filter_band):
+        """Add rasters to an empty mosaic dataset"""
+        Raster_Type = "Raster Dataset"
+        Update_CellSize = "UPDATE_CELL_SIZES"
+        Update_Boundary = "UPDATE_BOUNDARY"
+        Update_Overview = "NO_OVERVIEWS"
+        add_raster = arcpy.AddRastersToMosaicDataset_management(in_mosaic_dataset, Raster_Type, input_path,\
+                                                Update_CellSize,Update_Boundary,Update_Overview,"2","#","#",'#', filter_band, "SUBFOLDERS",\
+                                                "EXCLUDE_DUPLICATES","NO_PYRAMIDS","NO_STATISTICS","NO_THUMBNAILS","#","NO_FORCE_SPATIAL_REFERENCE")
+        return add_raster
+
+
+    @staticmethod
+    def copy_raster(raster2copy, out_raster):
+        copy_ras = arcpy.CopyRaster_management(raster2copy, out_raster,"#","0","0","NONE","NONE","32_BIT_FLOAT","NONE","NONE")
+        return copy_ras
+
+
+
+    @staticmethod
+    def composite_bands(path, bands, band_name):
+        composite_folder = os.path.join(path, "Composite_Bands")
+        if not os.path.exists(composite_folder):
+            os.makedirs(composite_folder)
+        comp_band_name = os.path.join(composite_folder, band_name )
+        cb = arcpy.CompositeBands_management(bands, comp_band_name)
+        return cb
+
+
+
+
+    def mosaics2data(self, filter_bands, gcs):
+
+        self.filter_bands = filter_bands
+        self.gcs = gcs
+
+
+        for self.file_extension in self.filter_bands:
+            # Creates gdb file
+            print("Working on {} of {}".format(self.file_extension, self.filter_bands))
+            output_dir = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_3)
+            output_dir_base = os.path.split(output_dir)[0]
+            gdb_file = MosaicS2Data.create_gdb(output_dir, self.file_extension[1:4] + '.gdb')
+            # Creates empty mosaic dataset file
+            cemd = MosaicS2Data.create_empty_mosaic_dataset(gdb_file, self.file_extension[1:4], self.gcs)
+            print('CEMD Done!')
+            # Add rasters to an empty mosaic dataset
+            print 'Adding rasters to an empty raster dataset'
+            add_raster = MosaicS2Data.add_ras2_empty_mosaic_dataset(cemd, output_dir_base, '*' + self.file_extension)
+            print('Done!')
+            # Creates output raster folder
+            Out_Raster_Folder = os.path.join(output_dir, self.file_extension[1:4] + "_Band")
+            if not os.path.exists(Out_Raster_Folder):
+                os.makedirs(Out_Raster_Folder)
+            # Creates output raster name
+            Out_Raster_B2 = os.path.join(Out_Raster_Folder, self.file_extension[1:4] + "_Band" + '.tif')
+            # Creates copied raster
+            print('Coying Raster')
+            MosaicS2Data.copy_raster(add_raster , Out_Raster_B2)
+            print('Succeded_B2!')

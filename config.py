@@ -61,7 +61,6 @@ os.listdir(main_directory)
 start_time = time.time()
 
 
-
 dir_mngmt = CalculateNDWI(main_directory, 'Sentinel2', 's2_unziped_data', 's2_processed_data', '.zip', '_MSIL1C.xml', '')
 dir_mngmt.makefolders()
 dir_mngmt.unzipfiles()
@@ -72,6 +71,7 @@ dir_mngmt.calculate_ndwi()
 spatial_ref = SpatialReference()
 gcs = spatial_ref.gcs(4326)
 pcs = spatial_ref.pcs(32645)
+
 extens = ['Green.tif', 'Blue.tif'] # Static
 mosaic_extens = MosaicNDWIData(main_directory, 'Sentinel2', 's2_unziped_data', 's2_processed_data', '', extens, '')
 mosaic_extens.makefolders()
@@ -80,6 +80,14 @@ mosaic_extens.mosaic_ndwi(gcs)
 
 end_time = time.time()
 print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start_time)/60))
+
+
+from sentinel2.s2processor import MosaicS2Data
+merges2dta = MosaicS2Data(main_directory, 'Sentinel2', '', 's2_processed_data', '','', '')
+
+filter_s2_data = ['_B08.jp2'] # '_B02.jp2','_B03.jp2', '_B04.jp2', '_B08.jp2'
+s2dta = merges2dta.mosaics2data(filter_s2_data, gcs)
+
 
 
 # -------------------Process Dem Data-----------------------#
@@ -114,6 +122,8 @@ dem.mosaic_dem_cal_slp('SRTM1_GDB.gdb', 'SRTM1_Mosaic', 'SRTM1_Mosaiced.tif', gc
 
 
 # -------------------Rule-based ImgSeg-----------------------#
+import time
+start_time = time.time()
 import os
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
 from dirext.dirextmngmt import DirMngmt
@@ -151,10 +161,9 @@ ndwi_green_t1 = thresh.threshold(0.3)
 ndwi_green_t2 = thresh.threshold(0.05)
 backscattert = thresh.threshold(-14.0)
 
-# glacier_path = gd.glacier_data("F:\datasets\Glacier_data\glims_db_20200630\glims_polygons.shp")
 
 glacier_path = gd.glacier_dir("E:\Glacier_GL_Data\GLIMS\glims_db_20190530\glims_polygons.shp")
-lake_size = 0.05 # in km2
+lake_size = 0.01 # in km2
 lake_searh_distance = 10000 # in meter
 
 ruleimgseg = RuleBasedSegmentation(main_directory, "rule-imgseg", "raster2polygon", "", spt.pcs(32645), spt.gcs(4326), glacier_path, lake_size, lake_searh_distance)
@@ -162,6 +171,8 @@ ruleimgseg = RuleBasedSegmentation(main_directory, "rule-imgseg", "raster2polygo
 ruleimgseg.makefolders()
 ruleimgseg.rule_based_imgseg('Glacial_Lakes_Segmented.tif', ndwi_blue_data, ndwi_green_data, sar_data,
 ndwi_bluet, ndwi_green_t1, ndwi_green_t2, backscattert)
+end_time = time.time()
+print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start_time)/60))
 
 
 
