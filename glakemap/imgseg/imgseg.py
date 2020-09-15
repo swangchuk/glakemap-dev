@@ -28,7 +28,7 @@ class ReadDatasets(FileExtMngmt):
 
         for r, d, f in os.walk(os.path.join(self.main_dir)):
             for file in f:
-                if file.endswith(self.file_ext): # 'NDWI_Mosaiced_Blue.tif'
+                if file.endswith(self.file_ext):
                     data_path = os.path.join(r, file)
                     head, tail = os.path.split(data_path)
                     print ('Head: {}, Tail: {}'.format(head, tail))
@@ -93,20 +93,17 @@ class RuleBasedSegmentation(DirMngmt):
         properties = "AREA"
         length_unit = "KILOMETERS"
         area_unit = "SQUARE_KILOMETERS"
-        # coordinate_system = pcs_code
         properties_1 = "CENTROID"
         properties_2 = 'PERIMETER_LENGTH'
         print('Adding X,Y coordinates into the attribute table...')
         arcpy.AddGeometryAttributes_management(file_path, properties_1, length_unit, area_unit, gcs_code)
         print('Adding parimeter of a polygon into the attribute table...')
         arcpy.AddGeometryAttributes_management(file_path, properties_2, length_unit, area_unit, pcs_code)
-        # Generate the extent coordinates using Add Geometry Properties tool
         print('Calculating area and adding area into the attribute table...')
         arcpy.AddGeometryAttributes_management(file_path, properties, length_unit, area_unit, pcs_code)
-        #coordinate_system_coord = GCS
-        DropField = 'gridcode' #Delete gridcode from the attribute table
+        drop_field = 'gridcode' # Delete gridcode from the attribute table
         print('Deleting gridcode field from the table...')
-        arcpy.DeleteField_management(file_path, DropField)
+        arcpy.DeleteField_management(file_path, drop_field)
 
 
 
@@ -114,8 +111,7 @@ class RuleBasedSegmentation(DirMngmt):
     def select_featureby_size(file_path, lake_size):
         file_dir = os.path.split(file_path)[0]
         feature = os.path.join(file_dir, 'RasterToPolygon_Select.shp')
-        where_clause = 'POLY_AREA>=' + str(lake_size) #Select area greter than 0.01 km2
-        # Execute Select
+        where_clause = 'POLY_AREA>=' + str(lake_size)
         print('Extracting lake areas larger than {} km^2'.format(lake_size))
         arcpy.Select_analysis(file_path, feature, where_clause)
         return feature
