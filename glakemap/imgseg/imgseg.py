@@ -56,14 +56,27 @@ class Thresholds():
         return thresh
 
 
+
+class GlacierDataset():
+
+
+    @staticmethod
+    def glacier_dir(gd_path):
+        return gd_path
+
+
+
+
 class RuleBasedSegmentation(DirMngmt):
 
 
-
-    def __init__(self, main_dir, subfolder_1, subfolder_2, subfolder_3, proj_pcs, proj_gcs):
+    def __init__(self, main_dir, subfolder_1, subfolder_2, subfolder_3, proj_pcs, proj_gcs, glacier_path, lake_size, lake_searh_dist):
         super(RuleBasedSegmentation, self).__init__(main_dir, subfolder_1, subfolder_2, subfolder_3)
         self.proj_pcs = proj_pcs
         self.proj_gcs = proj_gcs
+        self.glacier_path = glacier_path
+        self.lake_size = lake_size
+        self.lake_searh_dist = lake_searh_dist
 
 
 
@@ -96,15 +109,34 @@ class RuleBasedSegmentation(DirMngmt):
         arcpy.DeleteField_management(file_path, DropField)
 
 
+
     @staticmethod
-    def select_featureby_size(file_path):
+    def select_featureby_size(file_path, lake_size):
         file_dir = os.path.split(file_path)[0]
         feature = os.path.join(file_dir, 'RasterToPolygon_Select.shp')
-        where_clause = 'POLY_AREA>=0.01' #Select area greter than 0.01 km2
+        where_clause = 'POLY_AREA>=' + str(lake_size) #Select area greter than 0.01 km2
         # Execute Select
-        print('Extracting areas larger than 0.01 km2...')
+        print('Extracting lake areas larger than {} km^2'.format(lake_size))
         arcpy.Select_analysis(file_path, feature, where_clause)
         return feature
+
+
+
+
+    @staticmethod
+    def select_featureby_location(file_path, gd, lake_searh_dist):
+        file_dir = os.path.split(file_path)[0]
+        feature = os.path.join(file_dir, 'RasterToPolygon_Select.shp')
+        distance = 'WITHIN_A_DISTANCE' 
+        search_distance = str(lake_searh_dist) + ' Meters'
+        Selection_Type = 'NEW_SELECTION'
+        print('Selecting lakes within the distance of {} meters'.format(lake_searh_dist))
+        arcpy.MakeFeatureLayer_management(feature, 'select_feature_lyr') # Makes fearure layer
+        arcpy.SelectLayerByLocation_management('select_feature_lyr', distance, gd, search_distance, Selection_Type)
+        OutPut_SelectLayerByLocation = os.path.join(file_dir, 'SelectLayerByLocation_V0.shp')
+        arcpy.CopyFeatures_management('select_feature_lyr', OutPut_SelectLayerByLocation)
+        print('Done!')
+
 
 
 
@@ -142,7 +174,9 @@ class RuleBasedSegmentation(DirMngmt):
         print("OutProjectData", outProjectData)
     
         # RuleBasedSegmentation.add_polygon_attributes(outProjectData, self.proj_pcs, self.proj_gcs)
-        feature = RuleBasedSegmentation.select_featureby_size(outProjectData)
+        feature = RuleBasedSegmentation.select_featureby_size(outProjectData, self.lake_size)
+
+        RuleBasedSegmentation.select_featureby_location(feature, self.glacier_path, self.lake_searh_dist)
         
 
 

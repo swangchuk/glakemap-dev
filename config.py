@@ -126,7 +126,7 @@ from imgseg.imgseg import ReadDatasets
 from imgseg.imgseg import Thresholds
 from imgseg.imgseg import RuleBasedSegmentation
 from sptref.spatialref import SpatialReference as spt
-
+from imgseg.imgseg import GlacierDataset as gd
 
 data = ReadDatasets(main_directory, "rule-imgseg", "", "", "", "", "")
 data.makefolders()
@@ -151,8 +151,13 @@ ndwi_green_t1 = thresh.threshold(0.3)
 ndwi_green_t2 = thresh.threshold(0.05)
 backscattert = thresh.threshold(-14.0)
 
+# glacier_path = gd.glacier_data("F:\datasets\Glacier_data\glims_db_20200630\glims_polygons.shp")
 
-ruleimgseg = RuleBasedSegmentation(main_directory, "rule-imgseg", "raster2polygon", "", spt.pcs(32645), spt.gcs(4326))
+glacier_path = gd.glacier_dir("E:\Glacier_GL_Data\GLIMS\glims_db_20190530\glims_polygons.shp")
+lake_size = 0.05 # in km2
+lake_searh_distance = 10000 # in meter
+
+ruleimgseg = RuleBasedSegmentation(main_directory, "rule-imgseg", "raster2polygon", "", spt.pcs(32645), spt.gcs(4326), glacier_path, lake_size, lake_searh_distance)
 
 ruleimgseg.makefolders()
 ruleimgseg.rule_based_imgseg('Glacial_Lakes_Segmented.tif', ndwi_blue_data, ndwi_green_data, sar_data,
