@@ -217,20 +217,7 @@ class MosaicS2Data(FileExtMngmt):
 
     @staticmethod
     def copy_raster(raster2copy, out_raster):
-        copy_ras = arcpy.CopyRaster_management(raster2copy, out_raster,"#","0","0","NONE","NONE","32_BIT_FLOAT","NONE","NONE")
-        return copy_ras
-
-
-
-    @staticmethod
-    def composite_bands(path, bands, band_name):
-        composite_folder = os.path.join(path, "Composite_Bands")
-        if not os.path.exists(composite_folder):
-            os.makedirs(composite_folder)
-        comp_band_name = os.path.join(composite_folder, band_name )
-        cb = arcpy.CompositeBands_management(bands, comp_band_name)
-        return cb
-
+        arcpy.CopyRaster_management(raster2copy, out_raster,"#","0","0","NONE","NONE","32_BIT_FLOAT","NONE","NONE")
 
 
 
