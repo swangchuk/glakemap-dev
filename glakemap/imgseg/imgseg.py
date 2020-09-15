@@ -119,7 +119,7 @@ class RuleBasedSegmentation(DirMngmt):
 
 
     @staticmethod
-    def select_featureby_location(file_path, gd, lake_searh_dist):
+    def select_featureby_location(file_path, glacier_data, lake_searh_dist):
         file_dir = os.path.split(file_path)[0]
         feature = os.path.join(file_dir, 'RasterToPolygon_Select.shp')
         distance = 'WITHIN_A_DISTANCE' 
@@ -127,11 +127,14 @@ class RuleBasedSegmentation(DirMngmt):
         Selection_Type = 'NEW_SELECTION'
         print('Selecting lakes within the distance of {} meters'.format(lake_searh_dist))
         arcpy.MakeFeatureLayer_management(feature, 'select_feature_lyr') # Makes fearure layer
-        arcpy.SelectLayerByLocation_management('select_feature_lyr', distance, gd, search_distance, Selection_Type)
-        OutPut_SelectLayerByLocation = os.path.join(file_dir, 'SelectLayerByLocation_V0.shp')
-        arcpy.CopyFeatures_management('select_feature_lyr', OutPut_SelectLayerByLocation)
-        print('Done!')
-
+        arcpy.SelectLayerByLocation_management('select_feature_lyr', distance, glacier_data, search_distance, Selection_Type)
+        output_selectLayerByLocation = os.path.join(file_dir, 'SelectLayerByLocation_V0.shp')
+        arcpy.CopyFeatures_management('select_feature_lyr', output_selectLayerByLocation)
+        layer = 'select_feature_lyr2'
+        arcpy.MakeFeatureLayer_management(output_selectLayerByLocation, layer) # Makes fearure layer
+        print('Calculating distance of glacial lakes from a glacier...')
+        arcpy.Near_analysis(layer, glacier_data, '', True, False, 'PLANAR')
+        # return output_selectLayerByLocation
 
 
 
@@ -163,7 +166,7 @@ class RuleBasedSegmentation(DirMngmt):
         outPolygon = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_2, 'RasterToPolygon.shp')
         print('outPolygon', outPolygon)
         RuleBasedSegmentation.raster2polygon(save_result, outPolygon)
-        print('Converting {} to raster done!'.format(outPolygon))
+        print('Converting {} to shapefiles done!'.format(outPolygon))
 
         outProjectData = os.path.join(os.path.split(outPolygon)[0], 'RasterToPolygon_TM.shp')
         print("OutProjectData", outProjectData)
@@ -174,5 +177,72 @@ class RuleBasedSegmentation(DirMngmt):
         
 
 
-class CalZonalAttr():
-    pass
+
+class ZonesFeature(FileExtMngmt):
+
+    def zone(self):
+        for r, d, f in os.walk(os.path.join(self.main_dir, self.subfolder_1)):
+            for file in f:
+                if file.endswith(self.file_extension):
+                    zone_path = os.path.join(r, file)
+        return zone_path
+
+
+
+class ReadDatasetsPath(FileExtMngmt):
+    
+
+    def read_data(self, file_ext):
+
+        self.file_ext = file_ext
+
+        for r, d, f in os.walk(os.path.join(self.main_dir)):
+            for file in f:
+                if file.endswith(self.file_ext):
+                    data_path = os.path.join(r, file)
+                    head, tail = os.path.split(data_path)
+                    print ('Head: {}, Tail: {}'.format(head, tail))
+                    path_basename = os.path.basename(head)
+                    print ('Basename: {}'.format(path_basename))
+                    if tail.endswith('.tif.aux.xml'):
+                        continue
+                    elif tail.endswith('tif.ovr'):
+                        continue
+                    elif tail.endswith('.tif.xml'):
+                        continue
+                    elif tail.endswith(self.file_ext[-4:]):
+                        file_path = os.path.join(head, tail)
+                        print('Path: {}'.format(file_path))
+                        print('Reading {} raster done!\n\n'.format(self.file_ext))
+                        
+        return file_path
+
+
+
+class CalZonalAttr(ReadDatasetsPath):
+
+        
+        def zonal_attr(self, filenames, zone_data, csv_filename):
+            self.filenames = filenames
+            self.zone_data = zone_data
+            self.csv_filename = csv_filename
+
+            arcpy.CheckOutExtension("spatial")
+            feature_layer_name = "feature_layer"
+            arcpy.MakeFeatureLayer_management(self.zone_data, feature_layer_name) # Makes fearure layer
+
+            zone_stat_ras = []
+            
+            for file in self.filenames:
+                outTable_name = file[:-4] + '.dbf' # Table output names and extension in a list
+                outZSaT = ZonalStatisticsAsTable(self.zone_data, "FID", file, outTable_name, "DATA", "MEAN")
+                print ('Calculating zonal stat of {}'.format(file))
+                zone_stat_ras.append(outZSaT)
+
+            for file in zone_stat_ras:
+                print('Working on {}'.format(file))
+                arcpy.AddJoin_management(feature_layer_name, "FID", file, "FID_")
+
+            file_path_csv = os.path.join(self.main_dir, self.subfolder_1)
+            print('Exporting csv file!')
+            arcpy.TableToTable_conversion(feature_layer_name, file_path_csv, self.csv_filename)

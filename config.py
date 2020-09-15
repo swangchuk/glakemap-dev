@@ -171,8 +171,44 @@ ruleimgseg = RuleBasedSegmentation(main_directory, "rule-imgseg", "raster2polygo
 ruleimgseg.makefolders()
 ruleimgseg.rule_based_imgseg('Glacial_Lakes_Segmented.tif', ndwi_blue_data, ndwi_green_data, sar_data,
 ndwi_bluet, ndwi_green_t1, ndwi_green_t2, backscattert)
+
+
+
+import time
+start_time = time.time()
+import os
+dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
+from dirext.dirextmngmt import DirMngmt
+directory = DirMngmt(dir_path, '', '','')
+main_directory = directory.main_direc()
+print(main_directory)
+os.listdir(main_directory)
+
+# from imgseg.imgseg import ReadDatasetsPath
+from imgseg.imgseg import ZonesFeature
+from imgseg.imgseg import CalZonalAttr
+zone_dir = ZonesFeature(main_directory, "rule-imgseg", "", "", "", "SelectLayerByLocation_V0.shp", "")
+zone_path = zone_dir.zone()
+
+
+zone_attr = CalZonalAttr(main_directory, "rule-imgseg", "", "", "", "", "")
+
+ndwi_blue_data_pth = zone_attr.read_data('NDWI_Mosaiced_Blue.tif')
+ndwi_green_data_pth = zone_attr.read_data('NDWI_Mosaiced_Green.tif')
+sar_data_pth = zone_attr.read_data('_VV.tif')
+slope_data_pth = zone_attr.read_data('Resam_SRTM1_Slope.tif')
+nir_pth = zone_attr.read_data('08_Band.tif')
+dem_pth = zone_attr.read_data('_Mosaiced.tif')
+
+file_list = [ndwi_blue_data_pth, ndwi_green_data_pth, sar_data_pth, slope_data_pth, nir_pth, dem_pth]
+
+zone_attr.zonal_attr(file_list, zone_path, 'Feature_Data_V1.csv')
+
 end_time = time.time()
 print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start_time)/60))
+
+
+
 
 
 
