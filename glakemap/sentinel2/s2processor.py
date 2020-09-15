@@ -241,12 +241,12 @@ class MosaicS2Data(FileExtMngmt):
             add_raster = MosaicS2Data.add_ras2_empty_mosaic_dataset(cemd, output_dir_base, '*' + self.file_extension)
             print('Done!')
             # Creates output raster folder
-            Out_Raster_Folder = os.path.join(output_dir, self.file_extension[1:4] + "_Band")
-            if not os.path.exists(Out_Raster_Folder):
-                os.makedirs(Out_Raster_Folder)
+            out_raster_folder = os.path.join(output_dir, self.file_extension[1:4] + "_Band")
+            if not os.path.exists(out_raster_folder):
+                os.makedirs(out_raster_folder)
             # Creates output raster name
-            Out_Raster_B2 = os.path.join(Out_Raster_Folder, self.file_extension[1:4] + "_Band" + '.tif')
+            out_raster = os.path.join(out_raster_folder, self.file_extension[1:4] + "_Band" + '.tif')
             # Creates copied raster
             print('Coying Raster')
-            MosaicS2Data.copy_raster(add_raster , Out_Raster_B2)
+            MosaicS2Data.copy_raster(add_raster, out_raster)
             print('Succeded_B2!')
