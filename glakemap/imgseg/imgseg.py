@@ -234,6 +234,7 @@ class CalZonalAttr(ReadDatasetsPath):
             zone_stat_ras = []
             
             for file in self.filenames:
+                arcpy.env.extent = "MINOF"
                 outTable_name = file[:-4] + '.dbf' # Table output names and extension in a list
                 outZSaT = ZonalStatisticsAsTable(self.zone_data, "FID", file, outTable_name, "DATA", "MEAN")
                 print ('Calculating zonal stat of {}'.format(file))
