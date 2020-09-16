@@ -226,6 +226,7 @@ print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start
 # -------------------Random Forest-------------------------
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
 import os
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
 from glakemap.dirext.dirextmngmt import DirMngmt
@@ -236,70 +237,17 @@ os.listdir(main_directory)
 
 from glakemap.randforest.randomforest import RandomForestData
 from glakemap.randforest.randomforest import ProcessRFData
+from glakemap.randforest.randomforest import LoadModel
+from glakemap.randforest.randomforest import ModelPrediction
 
 rf_dir = RandomForestData(main_directory, "random_forest", "", "")
 rf_dir.makefolders()
 rf_file_pth = rf_dir.rf_data("_Data_V1.csv")
-
 rf_data = ProcessRFData()
+df_rfdata = rf_data.process_csv_data(rf_file_pth)
 
-df = rf_data.process_csv_data(rf_file_pth)
+model = LoadModel(main_directory, "random_forest", "", "")
+rf_model = model.model('.sav')
 
-
-
-
-
-""""
-#...............................
-       #sub modules
-# import MosaicS2Data
-#............................... 
-import DataForDEM # Check Sentinel2DataProcessing.py
- 
-import DemDataProcessing
-#********************Main and Post-Processing********************#
-
-import RuleBasedSegmentation
-#...............................
-       #sub modules
-#import Zonal_Stat_App
-
-#import Zonal_Stat_Train
-#...............................  
-
-#Change Python Environemnt: Random Forest (Python 37)
-#Perform Random forest classification
-import random_forest_classification_csv_V0  # for building model 
-
-import GLakeMap_Model_Prediction  # for predicting class label
-
-#Change Python Environemnt back to Python 27 64 bit
-#Append Random Forest Predictions (value==1) and select polygons
-
-#import Append_Pred_V0
-
-#----------------------------------------------------------------------------------------------
-from Append_Pred_V1 import Convert_shp_to_CSV
-from Append_Pred_V1 import Extract_glacial_lakes
-from Append_Pred_V1 import CSV_filepath_direc
-
-from Append_Pred_V1 import Convert_To_CSV_File
-
-from Append_Pred_V1 import*
-from MainDirectory import MainDirectory
-main_directory=MainDirectory()#Main_Directory
-
-shp_to_csv = Convert_shp_to_CSV(main_directory, "Data_predicted.csv", 'Location_V0.shp')
-
-csv_file, shp_file = shp_to_csv.read_pred_csv_file()
-
-egl = Extract_glacial_lakes(main_directory, shp_file, csv_file, 'RasterToPolygon', 'Swiss_Alps_gl.shp')
-sa = egl.selectAnalysis()
-
-cfd = CSV_filepath_direc(main_directory, "Predicted_Dataset")
-out_dir, f_dir, f_na = cfd.csv_file_name()
-print(out_dir)
-
-ctcf = Convert_To_CSV_File(sa, out_dir, f_na + ".csv")
-out_csv_file = ctcf.csv_file()
-print(out_csv_file)
+pred = ModelPrediction(main_directory, "random_forest", "", "")
+pred.make_prediction(rf_model, df_rfdata, 'Data_predicted.csv')
