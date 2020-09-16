@@ -6,14 +6,9 @@ Email:sonam.wangchuk@geo.uzh.ch
 
 
 import os
-import sklearn
 import pickle
 import pandas as pd
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-from pandas import ExcelWriter
+
 
 from glakemap.dirext.dirextmngmt import DirMngmt
 
@@ -94,7 +89,6 @@ class ProcessRFData():
 
 
 
-
 class ModelPrediction(DirMngmt):
     
 
@@ -108,12 +102,6 @@ class ModelPrediction(DirMngmt):
         dataset_ROI_Pred = pd.concat([self.data, df_pred], axis=1, sort=False)
         predicted_result_path = os.path.join(self.main_dir, self.subfolder_1, self.output_file)
         dataset_ROI_Pred.to_csv(predicted_result_path, encoding='utf-8', index=False)
-
-
-    
-
-
-
 
 
 

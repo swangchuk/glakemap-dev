@@ -226,7 +226,6 @@ print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start
 # -------------------Random Forest-------------------------
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 import os
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
 from glakemap.dirext.dirextmngmt import DirMngmt
@@ -247,7 +246,39 @@ rf_data = ProcessRFData()
 df_rfdata = rf_data.process_csv_data(rf_file_pth)
 
 model = LoadModel(main_directory, "random_forest", "", "")
-rf_model = model.model('.sav')
+rf_model = model.model('srs.sav')
+print(rf_model)
 
 pred = ModelPrediction(main_directory, "random_forest", "", "")
 pred.make_prediction(rf_model, df_rfdata, 'Data_predicted.csv')
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------Post-Processing-------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+import os
+dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
+from glakemap.dirext.dirextmngmt import DirMngmt
+directory = DirMngmt(dir_path, '', '','')
+main_directory = directory.main_direc()
+print(main_directory)
+os.listdir(main_directory)
+
+from glakemap.pp.postprocess import ReadData
+from glakemap.pp.postprocess import PostProcessing
+
+read_data = ReadData(main_directory, "", "", "")
+shp_file_path = read_data.read_post_process_data(main_directory, 'Location_V0.shp')
+print(shp_file_path)
+
+csv_file_path = read_data.read_post_process_data(main_directory, 'Data_predicted.csv')
+print(csv_file_path)
+
+out_shp_filename = 'glacial_lakes_srs.shp'
+out_csv_filename = 'glacial_lakes_srs.csv'
+
+pp =  PostProcessing()
+pp.post_process(shp_file_path, csv_file_path, out_shp_filename, out_csv_filename)
