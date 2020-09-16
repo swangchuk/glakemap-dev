@@ -235,11 +235,15 @@ print(main_directory)
 os.listdir(main_directory)
 
 from glakemap.randforest.randomforest import RandomForestData
+from glakemap.randforest.randomforest import ProcessRFData
 
-rf = RandomForestData(main_directory, "random_forest", "", "")
-rf.makefolders()
+rf_dir = RandomForestData(main_directory, "random_forest", "", "")
+rf_dir.makefolders()
+rf_file_pth = rf_dir.rf_data("_Data_V1.csv")
 
-rf_file_pth = rf.rf_data("_Data_V1.csv")
+rf_data = ProcessRFData()
+
+df = rf_data.process_csv_data(rf_file_pth)
 
 
 
