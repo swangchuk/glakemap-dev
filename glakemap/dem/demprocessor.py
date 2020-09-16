@@ -13,7 +13,7 @@ from arcpy.sa import *
 print('Loading module done! ^__^\n')
 
 
-from dirext.dirextmngmt import FileExtMngmt
+from glakemap.dirext.dirextmngmt import FileExtMngmt
 
 
 

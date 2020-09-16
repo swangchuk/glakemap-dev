@@ -1,12 +1,21 @@
+"""
+Created on Fri Mar 01 06:32:59 2019
+@author: Sonam Wangchuk
+Email:sonam.wangchuk@geo.uzh.ch
+"""
 
-# -------------------Process S1 Data-----------------------#
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------Process S1 Data--------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import time
 start_time = time.time()
-from dirext.dirextmngmt import DirMngmt
-from sentinel1.s1processor import ProcessSARData
-from sentinel1.s1processor import Reprojections
-from sentinel1.s1processor import MosaicDatastet
+from glakemap.dirext.dirextmngmt import DirMngmt
+from glakemap.sentinel1.s1processor import ProcessSARData
+from glakemap.sentinel1.s1processor import Reprojections
+from glakemap.sentinel1.s1processor import MosaicDatastet
+
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
@@ -22,7 +31,7 @@ process_data.process_sar_data()
 
 
 
-from sptref.spatialref import SpatialReference
+from glakemap.sptref.spatialref import SpatialReference
 spatial_ref = SpatialReference()
 gcs = spatial_ref.gcs(4326)
 pcs = spatial_ref.pcs(32645)
@@ -32,7 +41,7 @@ repro.reprojection()
 
 
 
-from sptref.spatialref import SpatialReference
+from glakemap.sptref.spatialref import SpatialReference
 spatial_ref = SpatialReference()
 gcs = spatial_ref.gcs(4326)
 pcs = spatial_ref.pcs(32645)
@@ -42,17 +51,19 @@ mosaic_data.makefolders()
 mosaic_data.mosaic()
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------Process S2 Data--------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------------------Process S2 Data-----------------------#
 
 import os
 import time
-from sentinel2.s2processor import CalculateNDWI
-from sentinel2.s2processor import MosaicNDWIData
-from sptref.spatialref import SpatialReference
+from glakemap.sentinel2.s2processor import CalculateNDWI
+from glakemap.sentinel2.s2processor import MosaicNDWIData
+from glakemap.sptref.spatialref import SpatialReference
 
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
-from dirext.dirextmngmt import DirMngmt
+from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
 print(main_directory)
@@ -82,34 +93,36 @@ end_time = time.time()
 print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start_time)/60))
 
 
-from sentinel2.s2processor import MosaicS2Data
+from glakemap.sentinel2.s2processor import MosaicS2Data
 merges2dta = MosaicS2Data(main_directory, 'Sentinel2', '', 's2_processed_data', '','', '')
 
 filter_s2_data = ['_B08.jp2'] # '_B02.jp2','_B03.jp2', '_B04.jp2', '_B08.jp2'
 s2dta = merges2dta.mosaics2data(filter_s2_data, gcs)
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------Process Dem Data-------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------------------Process Dem Data-----------------------#
 
 import os
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
-from dirext.dirextmngmt import DirMngmt
+from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
 print(main_directory)
 os.listdir(main_directory)
 
 
-from dem.demprocessor import MoveDemFiles
+from glakemap.dem.demprocessor import MoveDemFiles
 move_files = MoveDemFiles(main_directory, "Dem", "dem_unziped_data", 'dem_processed_data', ".zip", ".hgt", '')
 src_dir = r'C:\\Users\\Sonam\\.snap\\auxdata\\dem\\SRTM 1Sec HGT'
 move_files.move_over(src_dir, 'test')
 
 
 
-from dem.demprocessor import DemProcessor
-from sptref.spatialref import SpatialReference
+from glakemap.dem.demprocessor import DemProcessor
+from glakemap.sptref.spatialref import SpatialReference
 spatial_ref = SpatialReference()
 gcs = spatial_ref.gcs(4326)
 pcs = spatial_ref.pcs(32645)
@@ -120,23 +133,26 @@ dem.makefolders()
 dem.mosaic_dem_cal_slp('SRTM1_GDB.gdb', 'SRTM1_Mosaic', 'SRTM1_Mosaiced.tif', gcs, 'SRTM1_Slope', 'SRTM1_Slope.tif', 0.00001036)
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------Rule-based ImgSeg------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------------------Rule-based ImgSeg-----------------------#
+
 import time
 start_time = time.time()
 import os
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
-from dirext.dirextmngmt import DirMngmt
+from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
 print(main_directory)
 os.listdir(main_directory)
 
-from imgseg.imgseg import ReadDatasets
-from imgseg.imgseg import Thresholds
-from imgseg.imgseg import RuleBasedSegmentation
-from sptref.spatialref import SpatialReference as spt
-from imgseg.imgseg import GlacierDataset as gd
+from glakemap.imgseg.imgseg import ReadDatasets
+from glakemap.imgseg.imgseg import Thresholds
+from glakemap.imgseg.imgseg import RuleBasedSegmentation
+from glakemap.sptref.spatialref import SpatialReference as spt
+from glakemap.imgseg.imgseg import GlacierDataset as gd
 
 data = ReadDatasets(main_directory, "rule-imgseg", "", "", "", "", "")
 data.makefolders()
@@ -174,19 +190,17 @@ ndwi_bluet, ndwi_green_t1, ndwi_green_t2, backscattert)
 
 
 
-import time
-start_time = time.time()
 import os
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
-from dirext.dirextmngmt import DirMngmt
+from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
 print(main_directory)
 os.listdir(main_directory)
 
 # from imgseg.imgseg import ReadDatasetsPath
-from imgseg.imgseg import ZonesFeature
-from imgseg.imgseg import CalZonalAttr
+from glakemap.imgseg.imgseg import ZonesFeature
+from glakemap.imgseg.imgseg import CalZonalAttr
 zone_dir = ZonesFeature(main_directory, "rule-imgseg", "", "", "", "SelectLayerByLocation_V0.shp", "")
 zone_path = zone_dir.zone()
 
@@ -208,6 +222,25 @@ end_time = time.time()
 print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start_time)/60))
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# -------------------Random Forest-------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+import os
+dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
+from glakemap.dirext.dirextmngmt import DirMngmt
+directory = DirMngmt(dir_path, '', '','')
+main_directory = directory.main_direc()
+print(main_directory)
+os.listdir(main_directory)
+
+from glakemap.randforest.randomforest import RandomForestData
+
+rf = RandomForestData(main_directory, "random_forest", "", "")
+rf.makefolders()
+
+rf_file_pth = rf.rf_data("_Data_V1.csv")
 
 
 
