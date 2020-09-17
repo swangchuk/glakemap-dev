@@ -22,6 +22,6 @@
 	- **Note**: Strongly recommend to use SNAP 64-bit version and Python 2.7 64-bit installed in step 2 for the latter.
 
 ## 3. Executing glakemap package
-1) Make glakemap package (..\..\glakemap-dev\glakemap) the current working directory.
-
-2) Open and edit the "config.py" file. Directions for How To are provided as comments.
+- Download the glakemap package and set **glakemap-dev** as the current working directory.
+- Open and edit the "config.py" file. Directions for **How To** are provided as comments.
+- Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`
