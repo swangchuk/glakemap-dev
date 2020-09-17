@@ -11,8 +11,10 @@
 		conda install -c anaconda scipy
 		conda install -c anaconda matplotlib
 		conda install -c anaconda scikit-learn
-		conda install -c anaconda pandas0 ```
+		conda install -c anaconda pandas
 
+## 2. Installing snappy package
+- Download and install SNAP software in your machine
 1) Make glakemap package (..\..\glakemap-dev\glakemap) the current working directory.
 
 2) Open and edit the "config.py" file. Directions for How To are provided as comments.
