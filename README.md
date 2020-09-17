@@ -24,7 +24,7 @@
 ## 3. Using glakemap package
 - Download `glakemap` package and set **glakemap-dev** as the current working directory. You can also clone the repository if you have Git Software installed in your machine. If so,  use `git clone` command.
 - Open and edit the `config.py` file. Directions for **How To** are provided as comments.
-- Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`
+- Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`. It is easy/handy to change between Python versions.
 
 ## Possible Future Additions/Replacement
 
