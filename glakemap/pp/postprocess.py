@@ -37,9 +37,9 @@ class PostProcessing():
         where_clause = "Label=1"
         arcpy.SelectLayerByAttribute_management('Path_Polygon_Layer', "NEW_SELECTION", where_clause)
         # Path for the result
-        Out_feature_dir = os.path.split(shp_file_path)[0]
+        out_feature_dir = os.path.split(shp_file_path)[0]
         #Feature result name
-        Out_feature = os.path.join(Out_feature_dir, out_shp_filename)
+        out_feature = os.path.join(out_feature_dir, out_shp_filename)
         #Copy the the selected features i.e polygons with label=1
-        Copy_Feature = arcpy.CopyFeatures_management('Path_Polygon_Layer', Out_feature)
-        arcpy.TableToTable_conversion(Copy_Feature, Out_feature_dir, csv_filename)
+        copy_feature = arcpy.CopyFeatures_management('Path_Polygon_Layer', out_feature)
+        arcpy.TableToTable_conversion(copy_feature, out_feature_dir, csv_filename)
