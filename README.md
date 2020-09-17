@@ -26,13 +26,13 @@
 - Open and edit the `config.py` file. Directions for **How To** are provided as comments.
 - Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`
 
-### Future Developments
+## Future Developments
 
-- Replace `arcpy` with `gdal` package for supporting Python 3 and above for all tasks.
+- Replace `arcpy` with `gdal` package for supporting `Python 3` and above for all tasks.
 - Add different machine learning models.
 
 ## References
 
 - If you use this code for your work, please kindly refer the following publications:
-	- Wangchuk, S., & Bolch, T. (2020). Mapping of glacial lakes using Sentinel-1 and Sentinel-2 data and a random forest classifier: Strengths and challenges. Science of Remote Sensing, 2, 100008.
-	- Wangchuk, S., Bolch, T., & Zawadzki, J. (2019). Towards automated mapping and monitoring of potentially dangerous glacial lakes in Bhutan Himalaya using Sentinel-1 Synthetic Aperture Radar data. International journal of remote sensing, 40(12), 4642-4667.
+	- **Wangchuk**, S., & Bolch, T. (2020). Mapping of glacial lakes using Sentinel-1 and Sentinel-2 data and a random forest classifier: Strengths and challenges. Science of Remote Sensing, 2, 100008.
+	- **Wangchuk**, S., Bolch, T., & Zawadzki, J. (2019). Towards automated mapping and monitoring of potentially dangerous glacial lakes in Bhutan Himalaya using Sentinel-1 Synthetic Aperture Radar data. International journal of remote sensing, 40(12), 4642-4667.
