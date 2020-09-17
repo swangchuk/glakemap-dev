@@ -17,6 +17,9 @@
 ## 2. Installing snappy package
 * Download and install SNAP software in your machine: http://step.esa.int/main/download/snap-download/
 * Configure Python to use the SNAP-Python (snappy) interface: https://senbox.atlassian.net/wiki/spaces/SNAP/pages/50855941/Configure+Python+to+use+the+SNAP-Python+snappy+interface
+	Note:
+## 3. Installing arcpy package
+
 1) Make glakemap package (..\..\glakemap-dev\glakemap) the current working directory.
 
 2) Open and edit the "config.py" file. Directions for How To are provided as comments.
