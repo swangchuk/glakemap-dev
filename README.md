@@ -21,7 +21,7 @@
 * Configure Python to use the SNAP-Python (snappy) interface: https://senbox.atlassian.net/wiki/spaces/SNAP/pages/50855941/Configure+Python+to+use+the+SNAP-Python+snappy+interface
 	- **Note**: Strongly recommend to use SNAP 64-bit version and Python 2.7 64-bit installed in step 2 for the latter.
 
-## 3. Executing glakemap package
+## 3. Using glakemap package
 - Download the glakemap package and set **glakemap-dev** as the current working directory.
 - Open and edit the `config.py` file. Directions for **How To** are provided as comments.
 - Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`
@@ -33,6 +33,6 @@
 
 ## References
 
-- If you use this code for your work, please kindly refer the following publications:
+- If you use this program in your work, please kindly refer the following publications:
 	- **Wangchuk**, S., & Bolch, T. (2020). Mapping of glacial lakes using Sentinel-1 and Sentinel-2 data and a random forest classifier: Strengths and challenges. Science of Remote Sensing, 2, 100008.
 	- **Wangchuk**, S., Bolch, T., & Zawadzki, J. (2019). Towards automated mapping and monitoring of potentially dangerous glacial lakes in Bhutan Himalaya using Sentinel-1 Synthetic Aperture Radar data. International journal of remote sensing, 40(12), 4642-4667.
