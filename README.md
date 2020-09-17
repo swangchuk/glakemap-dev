@@ -1,4 +1,4 @@
-# Working with GLakeMap (Gacial Lake Mapping) Python Package
+# Working with GLakeMap (Gacial Lake Mapping) `Python Package`
 
 ## 1. Installing machine learning packages
 	- Download and install Anacnonda software in your machine; links below for details:
