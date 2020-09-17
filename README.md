@@ -26,7 +26,7 @@
 - Open and edit the `config.py` file. Directions for **How To** are provided as comments.
 - Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`
 
-## Future Developments
+## Possible Future Additions/Replacement
 
 - Replace `arcpy` with `gdal` package for supporting `Python 3` and above for all tasks.
 - Add different machine learning models.
