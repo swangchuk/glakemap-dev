@@ -11,8 +11,7 @@
 		conda install -c anaconda scipy
 		conda install -c anaconda matplotlib
 		conda install -c anaconda scikit-learn
-		conda install -c anaconda pandas
-		```
+		conda install -c anaconda pandas0 ```
 
 1) Make glakemap package (..\..\glakemap-dev\glakemap) the current working directory.
 
