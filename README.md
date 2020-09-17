@@ -14,12 +14,12 @@
 	conda install -c anaconda pandas
 	```
 ## 2. Installing arcpy package
-- Install Background Geoprocessing (64-bit) software: https://desktop.arcgis.com/en/arcmap/latest/analyze/executing-tools/64bit-background.htm Python 2.7 64-bit should be installed with this tool.
+- Install Background Geoprocessing (64-bit) software: https://desktop.arcgis.com/en/arcmap/latest/analyze/executing-tools/64bit-background.htm. Python 2.7 64-bit should be installed with this tool.
 
 ## 3. Installing snappy package
 * Download and install SNAP software in your machine: http://step.esa.int/main/download/snap-download/
 * Configure Python to use the SNAP-Python (snappy) interface: https://senbox.atlassian.net/wiki/spaces/SNAP/pages/50855941/Configure+Python+to+use+the+SNAP-Python+snappy+interface
-	- **Note**: Strongly recommend to use SNAP and Python 2.7 64-bit installed in step 2.
+	- **Note**: Strongly recommend to use SNAP and Python 2.7 64-bit installed in step 2 for the latter.
 
 
 1) Make glakemap package (..\..\glakemap-dev\glakemap) the current working directory.
