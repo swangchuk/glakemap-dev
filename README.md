@@ -1,7 +1,7 @@
 # Working with GLakeMap (Gacial Lake Mapping) Python Package
 
 ## 1. Installing machine learning packages
--Download and install Anacnonda software in your machine; links below for details:
+- Download and install Anacnonda software in your machine; links below for details:
 		- https://www.anaconda.com/
 		- https://www.anaconda.com/products/individual
 	- Open the Command Prompt window and type `conda list`. The command should list a lists of packages availabe in the environemnt. If the command fails to list the packages, add Anacnonda to the PATH or use  Anaconda Prompt instead.
