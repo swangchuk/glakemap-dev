@@ -35,7 +35,7 @@
 - Create and clone the environemnt (ENV) within ArcGIS Pro software: https://pro.arcgis.com/en/pro-app/arcpy/get-started/what-is-conda.htm. If creating ENV fails with error, run ArcGIS pro as an administrator and try again.
 - Once ENV is created, open Command Prompt and type `conda env list`. Conda should list all the availabe ENVs in your system along with the one you created.
 - To activate the ENV, type `conda create --name 'name-of-new-env' --clone 'old-env-name'`. Potentially, there would be **no ENV name** for your newly created/clone environemnt within ArcGIS Pro. If this is the case, then provide full **PATH** to the ENV instead of old-env-name; e.g. `conda create --name my_new_env_name --clone C:\Users\user_name\AppData\Local\ESRI\conda\envs\arcgispro-py3-clone1`. Now, if you type `conda env list` again in Command Prompt, your ENV with newly given ENV name should appear in the list. If it does, now activate ENV. If you succeded, an asterisk symbol should appear on your ENV. Now, you should be able to install any module into the newly created ENV, normally, using `conda` command. Refer: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-- Follow Step 3 for installing `snappy` package, except use Python 3 instead of Python 2.
+- Follow Step 3 for installing `snappy` package, except use Python 3 instead of Python 2. Install machine learning packages, too, as step 1.
 
 ## Possible Future Addition/Replacement
 
