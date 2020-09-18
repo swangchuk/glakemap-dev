@@ -39,7 +39,7 @@
 
 ## Possible Future Addition/Replacement
 
-- Replace `arcpy` with `gdal` package for supporting `Python 3` and above for all tasks.
+- Replace `arcpy` with `gdal` package for supporting `Python 3` and above for all tasks in an open access manner.
 - Add different machine learning models.
 
 ## Query/Support
