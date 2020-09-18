@@ -24,12 +24,27 @@
 ## 3. Using glakemap package
 - Download `glakemap` package and set **glakemap-dev** as the current working directory. You can also clone the repository if you have Git Software installed in your machine. If so,  use `git clone` command.
 - Open and edit the `config.py` file. Directions for **How To** are provided as comments.
-- Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`. It is easy/handy to change between Python versions.
+- Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`. It is easy/handy to change between Python versions in VS Code.
+- Changing Python versions apply only when you have acees to ArcGIS Desktop
+
+## **Notes**
+- Steps 2 and 3 are for supporting `arcpy` and `snappy` functionalites, concurrently, in Python 2.7.
+- To support all workflows simultaneously, installation of ArcGIS Pro is must and environemnt setup should be done correctly (see step 4).
+
+## 4. Running all workflows in Python 3
+- Create and clone the environemnt (ENV) within ArcGIS Pro software: https://pro.arcgis.com/en/pro-app/arcpy/get-started/what-is-conda.htm. If creating ENV fails with error, run ArcGIS pro as an administrator and try again.
+- Once ENV is created, open Command Prompt and type `conda env list`. Conda should list all the availabe ENVs in your system along with the one you created.
+- To activate the ENV, type `conda create --name 'name-of-new-env' --clone 'old-env-name'`. Potentially, there would be **no ENV name** for your newly created/clone environemnt within ArcGIS Pro. If this is the case, then provide full **PATH** to the ENV instead of old-env-name; e.g. `conda create --name my_new_env_name --clone C:\Users\user_name\AppData\Local\ESRI\conda\envs\arcgispro-py3-clone1`. Now, if you type `conda env list` again in Command Prompt, your ENV with newly given ENV name should appear in the list. If it does, now activate ENV. If you succeded, an asterisk symbol should appear on your ENV. Now, you should be able to install any module into the newly created ENV, normally, using `conda` command. Refer: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+- Follow Step 3 for installing `snappy` package, except use Python 3 instead of Python 2.
 
 ## Possible Future Addition/Replacement
 
 - Replace `arcpy` with `gdal` package for supporting `Python 3` and above for all tasks.
 - Add different machine learning models.
+
+## Query/Support
+- Links here are provide to support you with relevant resources that I personally found useful while setting up proper and working environemnt.
+- If you have any trouble or question, be it setting up the environemnt correcly or running the code successfully, do not hesite to contact me at: sw274@st-andrews.ac.uk
 
 ## References
 
