@@ -43,7 +43,7 @@
 - Add different machine learning models.
 
 ## Query/Support
-- Links here are provide to support you with relevant resources that I personally found useful while setting up proper and working environemnt.
+- Links here were provided to support you with relevant resources that I personally found useful while setting up proper and working environemnt.
 - If you have any trouble or question, be it setting up the environemnt correcly or running the code successfully, do not hesite to contact me at: sw274@st-andrews.ac.uk
 
 ## References
