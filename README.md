@@ -29,7 +29,7 @@
 
 ## **Notes**
 - Steps 2 and 3 are for supporting `arcpy` and `snappy` functionalites, concurrently, in Python 2.7.
-- To support all workflows simultaneously, installation of ArcGIS Pro is must and environemnt setup should be done correctly (see step 4).
+- To support all workflows simultaneously, installation of ArcGIS Pro is must and environemnt setup should be done correctly (see step 4). Howeever, you are strongly recommended to follow steps 1-3 as parameter for some tools between ArcGIS Desktop and Pro might differ and program might run into errors.
 
 ## 4. Running all workflows in Python 3
 - Create and clone the environemnt (ENV) within ArcGIS Pro software: https://pro.arcgis.com/en/pro-app/arcpy/get-started/what-is-conda.htm. If creating ENV fails with an error, run ArcGIS pro as an administrator and try again.
