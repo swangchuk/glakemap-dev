@@ -1,4 +1,8 @@
-
+"""
+Created on Fri Mar 01 06:32:59 2019
+@author: Sonam Wangchuk
+Email:sonam.wangchuk@geo.uzh.ch
+"""
 
 import os
 import arcpy
@@ -7,13 +11,9 @@ arcpy.env.overwriteOutput = True
 from glakemap.dirext.dirextmngmt import DirMngmt
 
 
-
 class ReadData(DirMngmt):
-
-    
     @staticmethod
     def read_post_process_data(main_dir, file_extension):
-
         for r, d, f in os.walk(main_dir):
             for file in f:
                 if file.endswith(file_extension):
@@ -22,11 +22,8 @@ class ReadData(DirMngmt):
         return data_loc
 
 
-
-
 class PostProcessing():
-
-
+    
     @staticmethod
     def post_process(shp_file_path, csv_file_path, out_shp_filename, csv_filename):
         # Create a feature layer from the featureclass

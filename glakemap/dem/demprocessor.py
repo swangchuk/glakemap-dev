@@ -12,19 +12,14 @@ arcpy.env.overwriteOutput = True
 from arcpy.sa import *
 print('Loading module done! ^__^\n')
 
-
 from glakemap.dirext.dirextmngmt import FileExtMngmt
-
 
 
 class MoveDemFiles(FileExtMngmt):
 
-
     def move_over(self, src_dir, dest_dir):
-
         self.src_dir = src_dir
         self.dest_dir = dest_dir
-
         for files in os.listdir(self.src_dir):
             if self.zip_extension in files:
                 print("DEM file: {}".format(files))
@@ -36,12 +31,10 @@ class MoveDemFiles(FileExtMngmt):
                 print("DEM files moved!")
 
 
-
 class DemProcessor(FileExtMngmt):
 
-
-
-    def mosaic_dem_cal_slp(self, gdb_name, folder2save_mosaic_ras, mosaiced_dem_ras_name, projection, folder2save_slp_ras, slp_ras_name, z_factor):
+    def mosaic_dem_cal_slp(self, gdb_name, folder2save_mosaic_ras, mosaiced_dem_ras_name,
+                           projection, folder2save_slp_ras, slp_ras_name, z_factor):
         self.gdb_name = gdb_name
         self.folder2save_mosaic_ras = folder2save_mosaic_ras
         self.mosaiced_dem_ras_name = mosaiced_dem_ras_name
@@ -49,9 +42,6 @@ class DemProcessor(FileExtMngmt):
         self.folder2save_slp_ras = folder2save_slp_ras
         self.slp_ras_name = slp_ras_name
         self.z_factor = z_factor
-
-
-
         file_path = os.path.join(self.main_dir, self.subfolder_1)
         gdb_file_path = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_3)
         print('Creating geodatabase file... ^__^')
@@ -71,14 +61,12 @@ class DemProcessor(FileExtMngmt):
                                                 file_path, "UPDATE_CELL_SIZES","UPDATE_BOUNDARY","NO_OVERVIEWS","2","#","#",
                                                 self.projection, '*'+self.file_extension, "SUBFOLDERS","EXCLUDE_DUPLICATES","NO_PYRAMIDS","NO_STATISTICS",
                                                 "NO_THUMBNAILS","#","FORCE_SPATIAL_REFERENCE")
-
         in_raster = os.path.join(mosaicgdb, mosaic_dataset_name)
         create_folder = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_3, self.folder2save_mosaic_ras)
         if not os.path.exists(create_folder):
             os.makedirs(create_folder)
         out_raster = os.path.join(create_folder, self.mosaiced_dem_ras_name)
         arcpy.CopyRaster_management(in_raster, out_raster, "#","#","#","NONE","NONE","16_BIT_UNSIGNED","NONE","NONE")
-
 
         def slope_cal():
             print('Reading DEM! ^_^')

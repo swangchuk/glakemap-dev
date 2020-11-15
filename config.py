@@ -4,7 +4,7 @@ Created on Fri Mar 01 06:32:59 2019
 Email:sonam.wangchuk@geo.uzh.ch
 """
 
-
+"""
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------------------Process S1 Data--------------------------
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -18,6 +18,7 @@ from glakemap.sentinel1.s1processor import MosaicDatastet
 
 dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
 directory = DirMngmt(dir_path, '', '','')
+
 main_directory = directory.main_direc()
 print(main_directory)
 
@@ -50,7 +51,10 @@ mosaic_data = MosaicDatastet(main_directory, "Sentinel1", "s1_unziped_data", 's1
 mosaic_data.makefolders()
 mosaic_data.mosaic()
 
+end_time = time.time()
+print('Time taken to process Sentinel-1 data: {} minutes'.format((end_time-start_time)/60))
 
+"""
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------------------Process S2 Data--------------------------
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -16,7 +16,6 @@ arcpy.env.overwriteOutput = True
 from arcpy.sa import *
 print('Loading module done! ^__^\n')
 
-
 # Import user defined modules-----------------------
 
 from glakemap.dirext.dirextmngmt import FileExtMngmt
@@ -25,21 +24,16 @@ from glakemap.dirext.dirextmngmt import FileExtMngmt
 GPF.getDefaultInstance().getOperatorSpiRegistry().loadOperatorSpis()
 
 
-
 class CalculateNDWI(FileExtMngmt):
-
 
     @staticmethod
     def read_data(filename):
         return ProductIO.readProduct(filename)
 
-
     @staticmethod
     def write_tif(product, filename):
         ProductIO.writeProduct(product, filename, "GeoTIFF")
 
-
-    
     @staticmethod
     def calculate_ndwi_blue(data, band_names):
         "Calculates Normalized Difference Water Index (NDWI) using blue and near-infrared bands"
@@ -49,8 +43,6 @@ class CalculateNDWI(FileExtMngmt):
         parameters.put('resampleType', 'Highest resolution') # In case the resolution of the raster does not match
         return GPF.createProduct("Ndwi2Op", parameters,data)
     
-                
-    
     @staticmethod
     def calculate_ndwi_green(data, band_names):
         "Calculates Normalized Difference Water Index (NDWI) using green and near-infrared bands"
@@ -59,8 +51,6 @@ class CalculateNDWI(FileExtMngmt):
         parameters.put('nirSourceBand', band_names[7]) # NIR {Green-NIR/Green+NIR}
         parameters.put('resampleType','Highest resolution') # In case the resolution of the raster does not match
         return GPF.createProduct("Ndwi2Op", parameters, data)
-
-    
 
     def calculate_ndwi(self):   
         for r, d, f in os.walk(os.path.join(self.main_dir, self.subfolder_1)):
@@ -78,14 +68,12 @@ class CalculateNDWI(FileExtMngmt):
                     height = product.getSceneRasterHeight()
                     name = product.getName()
                     description = product.getDescription()
-                    
                     print('Product name is:   {}\n'.format(name[-27:-7]))
                     print('Bands:    {}\n'.format(list(band_names)))
                     print('Product    {},{} \n'.format(name, description))
                     print('Raster size:    {} x {} pixels \n'.format(width, height))
                     print('Start time: ' +  str(product.getStartTime()))
                     print('End time: ' +  str(product.getEndTime()))
-                    
                     # Path to a directory and make a new folder (File_Name)
                     file_name = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_3, name[-27:-7] + '_NDWI_Blue')
                     if not os.path.exists(file_name):
@@ -112,11 +100,7 @@ class CalculateNDWI(FileExtMngmt):
                     CalculateNDWI.write_tif(ndwi_green, output_dir)
 
 
-
-
 class MosaicNDWIData(FileExtMngmt):
-
-    
 
     def list_files(self):
         for r, d, f in os.walk(os.path.join(self.main_dir, self.subfolder_1)):
@@ -127,11 +111,8 @@ class MosaicNDWIData(FileExtMngmt):
                         files_found = os.path.join(r, file)
                         print("File found: {}".format(files_found))
     
-
-
     def mosaic_ndwi(self, gcs):
         self.gcs = gcs
-
         for ext in self.file_extension:
             filters = ext
             filters_new = "*" + filters
@@ -141,7 +122,6 @@ class MosaicNDWIData(FileExtMngmt):
             #Creates a raster dataset with .tif extension
             mosaiced_raster_name = 'NDWI_Mosaiced' + '_' + filters[:-4] + '.tif'
             print(mosaiced_raster_name)
-
             # 1) Creates a file geodatabase in a folder
             print('Creating Geodatabase file: {} of {} ... ^_^'.format(ext, self.file_extension))
             output_dir = os.path.join(self.main_dir, self.subfolder_1, self.subfolder_3)
@@ -149,7 +129,6 @@ class MosaicNDWIData(FileExtMngmt):
             print('Output_directory {}:'.format(output_dir))
             arcpy.CreateFileGDB_management(output_dir, geodatabase_file_name) # Creates gdb file
             print('Done!^_^')
-
             # 2) Creates an empty mosaic dataset in a file geodatabase
             in_workspace = os.path.join(output_dir, geodatabase_file_name) # Path to the geodatabase
             in_mosaicdataset_name = 'NDWI_RasterDataset' + '_' + filters[:-4]
@@ -160,7 +139,6 @@ class MosaicNDWIData(FileExtMngmt):
             print('Creating an empty mosaic dataset: {} of {} ... ^_^'.format(ext, self.file_extension))
             arcpy.CreateMosaicDataset_management(in_workspace, in_mosaicdataset_name, self.gcs, NumberOfBand, PixelType, product_definition, Wavelength)
             print('Done!^_^')
-
             # 3) Add raster dataset to a mosaic dataset from many sources, including a file, folder, raster catalog, table, or web service.
             in_mosaic_dataset = os.path.join(in_workspace, in_mosaicdataset_name)
             print('Adding rasters to an empty mosaic dataset: {} of {} ... ^_^'.format(ext, self.file_extension))
@@ -168,7 +146,6 @@ class MosaicNDWIData(FileExtMngmt):
                                                     "UPDATE_CELL_SIZES","UPDATE_BOUNDARY","NO_OVERVIEWS","2","#","#",'#', filters_new, "SUBFOLDERS",\
                                                     "EXCLUDE_DUPLICATES","NO_PYRAMIDS","NO_STATISTICS","NO_THUMBNAILS","#","NO_FORCE_SPATIAL_REFERENCE")
             print('Done! ^_^')
-            
             # 4) Creates a folder to copy NDWI mosaiced dataset
             in_raster = os.path.join(in_workspace, in_mosaicdataset_name)
             ndwi = os.path.join(output_dir, 'NDWI_Mosaic' + '_' + filters[:-4])
@@ -180,16 +157,13 @@ class MosaicNDWIData(FileExtMngmt):
             print('Done! ^_^ ^_^ ^_^')
 
 
-
 class MosaicS2Data(FileExtMngmt):
-
 
     @staticmethod
     def create_gdb(path, gdb_name):
         """Creates an empty geodatabase file"""
         gdb_file = arcpy.CreateFileGDB_management(path, gdb_name) # Creates gdb file
         return gdb_file
-
 
     @staticmethod
     def create_empty_mosaic_dataset(in_workspace, in_mosaicdataset_name, gcs):
@@ -200,7 +174,6 @@ class MosaicS2Data(FileExtMngmt):
         Wavelength = ""
         md = arcpy.CreateMosaicDataset_management(in_workspace,in_mosaicdataset_name, gcs, NumberOfBand, PixelType, product_definition, Wavelength)
         return md
-
 
     @staticmethod
     def add_ras2_empty_mosaic_dataset(in_mosaic_dataset, input_path, filter_band):
@@ -214,19 +187,13 @@ class MosaicS2Data(FileExtMngmt):
                                                 "EXCLUDE_DUPLICATES","NO_PYRAMIDS","NO_STATISTICS","NO_THUMBNAILS","#","NO_FORCE_SPATIAL_REFERENCE")
         return add_raster
 
-
     @staticmethod
     def copy_raster(raster2copy, out_raster):
         arcpy.CopyRaster_management(raster2copy, out_raster,"#","0","0","NONE","NONE","32_BIT_FLOAT","NONE","NONE")
 
-
-
     def mosaics2data(self, filter_bands, gcs):
-
         self.filter_bands = filter_bands
         self.gcs = gcs
-
-
         for self.file_extension in self.filter_bands:
             # Creates gdb file
             print("Working on {} of {}".format(self.file_extension, self.filter_bands))
@@ -237,7 +204,7 @@ class MosaicS2Data(FileExtMngmt):
             cemd = MosaicS2Data.create_empty_mosaic_dataset(gdb_file, self.file_extension[1:4], self.gcs)
             print('CEMD Done!')
             # Add rasters to an empty mosaic dataset
-            print 'Adding rasters to an empty raster dataset'
+            print('Adding rasters to an empty raster dataset')
             add_raster = MosaicS2Data.add_ras2_empty_mosaic_dataset(cemd, output_dir_base, '*' + self.file_extension)
             print('Done!')
             # Creates output raster folder
