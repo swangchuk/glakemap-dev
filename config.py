@@ -243,6 +243,7 @@ from glakemap.randforest.randomforest import ProcessRFData
 from glakemap.randforest.randomforest import LoadModel
 from glakemap.randforest.randomforest import ModelPrediction
 
+enter_model_name = "glakemap.sav"
 rf_dir = RandomForestData(main_directory, "random_forest", "", "")
 rf_dir.makefolders()
 rf_file_pth = rf_dir.rf_data("_Data_V1.csv")
@@ -250,7 +251,7 @@ rf_data = ProcessRFData()
 df_rfdata = rf_data.process_csv_data(rf_file_pth)
 # df_rfdata2 = df_rfdata.iloc[:, 6:12].values
 model = LoadModel(main_directory, "random_forest", "", "")
-rf_model = model.model('glakemap.sav')
+rf_model = model.model(enter_model_name)
 
 pred = ModelPrediction(main_directory, "random_forest", "", "")
 in_data, predicted_result = pred.make_prediction(rf_model, df_rfdata, 'Data_predicted.csv')
@@ -279,8 +280,8 @@ print(shp_file_path)
 csv_file_path = read_data.read_post_process_data(main_directory, 'Data_predicted.csv')
 print(csv_file_path)
 
-out_shp_filename = 'glacial_lakes_final.shp'
-out_csv_filename = 'glacial_lakes_final.csv'
+out_shp_filename = 'glacial_lakes_final2.shp'
+out_csv_filename = 'glacial_lakes_final2.csv'
 
 pp =  PostProcessing()
 pp.post_process(shp_file_path, csv_file_path, out_shp_filename, out_csv_filename)
