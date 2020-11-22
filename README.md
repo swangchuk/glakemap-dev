@@ -1,4 +1,4 @@
-# Working with GLakeMap (Gacial Lake Mapping) Python Package
+# Working with Gacial Lake Mapping Python Package (GLakeMap)
 
 ## 1. Installing machine learning packages
 - Download and install Anacnonda software in your machine; links for details:
@@ -21,10 +21,11 @@
 * Configure Python to use the SNAP-Python (snappy) interface: https://senbox.atlassian.net/wiki/spaces/SNAP/pages/50855941/Configure+Python+to+use+the+SNAP-Python+snappy+interface
 	- **Note**: Strongly recommend to use SNAP 64-bit version and Python 2.7 64-bit installed in step 2 for the latter.
 
-## 3. Using glakemap package
-- Download `glakemap` package and set **glakemap-dev** as the current working directory. You can also clone the repository if you have Git Software installed in your machine. If so,  use `git clone` command.
+## 3. Downloading data and using glakemap package
+- Download Sentinel-1, Sentinel-2, and DEM data and place them, respectively, inside the folder `data_directory` which is provide along with the package. Downloading DEM data is not necessary. Check `Process Dem Data` section of  the `config.py` file.
+- Download `glakemap` package and set **glakemap-dev** as the current working directory. You can also clone the repository if you have **Git** installed in your machine. If so,  use `git clone` command.
 - Open and edit the `config.py` file. Directions for **How To** are provided as comments.
-- Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`. It is easy/handy to change between Python versions in VS Code.
+- Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`. It is easy/handy to change between Python versions in VS Code. Spyder IDE can be used as well to excute the machine learning codes.
 - Changing Python versions apply only when you have acees to ArcGIS Desktop
 
 ## **Notes**
@@ -44,7 +45,7 @@
 
 ## Query/Support
 - Links here were provided to support you with relevant resources that I personally found useful while setting up proper and working environemnt.
-- If you have any trouble or question, be it setting up the environemnt correcly or running the code successfully, do not hesite to contact me at: sw274@st-andrews.ac.uk
+- If you have any trouble or question, be it setting up the environemnt correcly or running the code successfully, drop me an email: sw274@st-andrews.ac.uk
 
 ## References
 
