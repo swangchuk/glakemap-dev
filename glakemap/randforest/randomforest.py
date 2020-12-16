@@ -60,7 +60,6 @@ class ProcessRFData():
         df = df.drop(columns=duplicates_col_names)
         df = df.dropna()
         print('New dataframe cols: {}; length: {}'.format(list(df.columns), len(list(df.columns))))
-        #df2 = df.iloc[:, 6:12].values
         return df
 
 
@@ -71,10 +70,11 @@ class ModelPrediction(DirMngmt):
         self.data = data
         self.output_file = output_file
         loaded_model = pickle.load(open(self.model, 'rb'))
-        in_data = data.iloc[:, 6:12].values
-        y_pred = loaded_model.predict(data.iloc[:, 6:12].values)
+        in_data = pd.read_csv(data)
+        in_data_cols = in_data.iloc[:, 6:12].values
+        y_pred = loaded_model.predict(in_data_cols)
         df_pred = pd.DataFrame({"Label" : y_pred})
-        dataset_ROI_Pred = pd.concat([self.data, df_pred], axis=1, sort=False)
+        dataset_ROI_Pred = pd.concat([in_data, df_pred], axis=1, sort=False)
         predicted_result_path = os.path.join(self.main_dir, self.subfolder_1, self.output_file)
         dataset_ROI_Pred.to_csv(predicted_result_path, encoding='utf-8', index=False)
         return in_data, y_pred
