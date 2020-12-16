@@ -219,6 +219,7 @@ df_rfdata = rf_data.process_csv_data(rf_file_pth)
 
 save_csv_dir = os.path.join(dir_path, 'random_forest')
 processed_csv_filename = os.path.join(save_csv_dir, 'processed_data.csv')
+print('Processed data path----------> : {}'.format(processed_csv_filename))
 processed_csv = df_rfdata.to_csv(processed_csv_filename, index=False)
 rf_file_pth2 = rf_dir.rf_data("processed_data.csv")
 
@@ -227,7 +228,6 @@ rf_model = model.model(enter_model_name)
 
 pred = ModelPrediction(main_directory, "random_forest", "", "")
 in_data, predicted_result = pred.make_prediction(rf_model, rf_file_pth2, 'predicted_data.csv')
-print('Predicted data path----------> : {}'.format(in_data))
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------------------Post-Processing-------------------------
