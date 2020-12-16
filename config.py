@@ -15,7 +15,7 @@ from glakemap.sentinel1.s1processor import ProcessSARData
 from glakemap.sentinel1.s1processor import Reprojections
 from glakemap.sentinel1.s1processor import MosaicDatastet
 
-dir_path = r"E:\Poiqu_GL\Poiqu\glakemap-dev\data_directory" # Change the file path here
+dir_path = r"C:\Users\Sonam\Documents\gt\glakemap-dev\data_directory" # Change the file path here
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
 print(main_directory)
@@ -46,6 +46,7 @@ mosaic_data.mosaic()
 end_time = time.time()
 print('Time taken to process Sentinel-1 data: {} minutes'.format((end_time-start_time)/60))
 
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------------------Process S2 Data--------------------------
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -56,42 +57,44 @@ from glakemap.sentinel2.s2processor import CalculateNDWI
 from glakemap.sentinel2.s2processor import MosaicNDWIData
 from glakemap.sptref.spatialref import SpatialReference
 
-dir_path = r"E:\Poiqu_GL\Poiqu\glakemap-dev\data_directory" # Change the file path here
+dir_path = r"C:\Users\Sonam\Documents\gt\glakemap-dev\data_directory" # Change the file path here
 from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
 print(main_directory)
 os.listdir(main_directory)
 
-start_time = time.time()
-dir_mngmt = CalculateNDWI(main_directory, 'Sentinel2', 's2_unziped_data', 's2_processed_data', '.zip', '_MSIL1C.xml', '')
-dir_mngmt.makefolders()
-dir_mngmt.unzipfiles()
-dir_mngmt.calculate_ndwi()
-
 spatial_ref = SpatialReference()
 gcs = spatial_ref.gcs(4326)
 pcs = spatial_ref.pcs(32645) # Check the projected coordinate system for your region of interest and change accordingly
+
+start_time = time.time()
+dir_mngmt = CalculateNDWI(main_directory, 'Sentinel2', 's2_unziped_data', 's2_processed_data', '.zip', '_MSIL1C.xml', '') # _MSIL1C.xml
+#dir_mngmt.makefolders()
+#dir_mngmt.unzipfiles()
+dir_mngmt.calculate_ndwi()
 
 extens = ['Green.tif', 'Blue.tif'] # Static
 mosaic_extens = MosaicNDWIData(main_directory, 'Sentinel2', 's2_unziped_data', 's2_processed_data', '', extens, '')
 mosaic_extens.makefolders()
 mosaic_extens.list_files()
 mosaic_extens.mosaic_ndwi(gcs)
-end_time = time.time()
-print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start_time)/60))
 
 from glakemap.sentinel2.s2processor import MosaicS2Data
 merges2dta = MosaicS2Data(main_directory, 'Sentinel2', '', 's2_processed_data', '','', '')
 filter_s2_data = ['_B08.jp2'] # '_B02.jp2','_B03.jp2', '_B04.jp2', '_B08.jp2'
 s2dta = merges2dta.mosaics2data(filter_s2_data, gcs)
 
+end_time = time.time()
+print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start_time)/60))
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------------------Process Dem Data-------------------------
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import os
-dir_path = r"E:\Poiqu_GL\Poiqu\glakemap-dev\data_directory" # Change the file path here
+dir_path = r"C:\Users\Sonam\Documents\gt\glakemap-dev\data_directory" # Change the file path here
 from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
@@ -100,7 +103,7 @@ os.listdir(main_directory)
 
 from glakemap.dem.demprocessor import MoveDemFiles
 move_files = MoveDemFiles(main_directory, "Dem", "dem_unziped_data", 'dem_processed_data', ".zip", ".hgt", '')
-src_dir = r'C:\\Users\\Name\\.snap\\auxdata\\dem\\SRTM 1Sec HGT' # Dem data are automatically downloded while processing Sentinel-1 data. Find the folder where it is located and provide the path. Check .snap folder inside you PC.
+src_dir = r"C:\Users\Sonam\.snap\auxdata\dem\SRTM 1Sec HGT" # Dem data are automatically downloded while processing Sentinel-1 data. Find the folder where it is located and provide the path. Check .snap folder inside you PC.
 move_files.move_over(src_dir, os.path.join(main_directory, "Dem", "raw_data"))
 
 from glakemap.dem.demprocessor import DemProcessor
@@ -121,7 +124,7 @@ dem.mosaic_dem_cal_slp('SRTM1_GDB.gdb', 'SRTM1_Mosaic', 'SRTM1_Mosaiced.tif', gc
 import time
 start_time = time.time()
 import os
-dir_path = r"E:\Poiqu_GL\Poiqu\glakemap-dev\data_directory" # Change the file path here
+dir_path = r"C:\Users\Sonam\Documents\gt\glakemap-dev\data_directory" # Change the file path here
 from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
@@ -162,7 +165,7 @@ ruleimgseg.rule_based_imgseg('Glacial_Lakes_Segmented.tif', ndwi_blue_data, ndwi
 ndwi_bluet, ndwi_green_t1, ndwi_green_t2, backscattert)
 
 import os
-dir_path = r"E:\Poiqu_GL\Poiqu\glakemap-dev\data_directory" # Change the file path here
+dir_path = r"C:\Users\Sonam\Documents\gt\glakemap-dev\data_directory" # Change the file path here
 from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
@@ -192,8 +195,9 @@ print('Time taken to process Sentinel-2 data: {} minutes'.format((end_time-start
 # -------------------Random Forest-------------------------
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Python 3 can be used here
+
 import os
-dir_path = r"E:\Poiqu_GL\Poiqu\glakemap-dev\data_directory" # Change the file path here
+dir_path = r"C:\Users\Sonam\Documents\gt\glakemap-dev\data_directory" # Change the file path here
 from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
@@ -209,14 +213,21 @@ enter_model_name = "glakemap.sav"
 rf_dir = RandomForestData(main_directory, "random_forest", "", "")
 rf_dir.makefolders()
 rf_file_pth = rf_dir.rf_data("_Data_V1.csv")
+print('Raw data path----------> : {}'.format(rf_file_pth))
 rf_data = ProcessRFData()
 df_rfdata = rf_data.process_csv_data(rf_file_pth)
-# df_rfdata2 = df_rfdata.iloc[:, 6:12].values
+
+save_csv_dir = os.path.join(dir_path, 'random_forest')
+processed_csv_filename = os.path.join(save_csv_dir, 'processed_data.csv')
+processed_csv = df_rfdata.to_csv(processed_csv_filename, index=False)
+rf_file_pth2 = rf_dir.rf_data("processed_data.csv")
+
 model = LoadModel(main_directory, "random_forest", "", "")
 rf_model = model.model(enter_model_name)
 
 pred = ModelPrediction(main_directory, "random_forest", "", "")
-in_data, predicted_result = pred.make_prediction(rf_model, df_rfdata, 'Data_predicted.csv')
+in_data, predicted_result = pred.make_prediction(rf_model, rf_file_pth2, 'predicted_data.csv')
+print('Predicted data path----------> : {}'.format(in_data))
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------------------Post-Processing-------------------------
@@ -224,7 +235,7 @@ in_data, predicted_result = pred.make_prediction(rf_model, df_rfdata, 'Data_pred
 
 # Use python 2 with arcpy
 import os
-dir_path = "E:\Poiqu_GL\Poiqu" # Change the file path
+dir_path = r"C:\Users\Sonam\Documents\gt\glakemap-dev\data_directory" # Change the file path
 from glakemap.dirext.dirextmngmt import DirMngmt
 directory = DirMngmt(dir_path, '', '','')
 main_directory = directory.main_direc()
@@ -238,7 +249,7 @@ read_data = ReadData(main_directory, "", "", "")
 shp_file_path = read_data.read_post_process_data(main_directory, 'Location_V0.shp')
 print(shp_file_path)
 
-csv_file_path = read_data.read_post_process_data(main_directory, 'Data_predicted.csv')
+csv_file_path = read_data.read_post_process_data(main_directory, 'predicted_data.csv')
 print(csv_file_path)
 
 out_shp_filename = 'glacial_lakes_final2.shp'
@@ -246,3 +257,4 @@ out_csv_filename = 'glacial_lakes_final2.csv'
 
 pp =  PostProcessing()
 pp.post_process(shp_file_path, csv_file_path, out_shp_filename, out_csv_filename)
+
