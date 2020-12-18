@@ -70,8 +70,8 @@ pcs = spatial_ref.pcs(32645) # Check the projected coordinate system for your re
 
 start_time = time.time()
 dir_mngmt = CalculateNDWI(main_directory, 'Sentinel2', 's2_unziped_data', 's2_processed_data', '.zip', '_MSIL1C.xml', '') # _MSIL1C.xml
-#dir_mngmt.makefolders()
-#dir_mngmt.unzipfiles()
+dir_mngmt.makefolders()
+dir_mngmt.unzipfiles()
 dir_mngmt.calculate_ndwi()
 
 extens = ['Green.tif', 'Blue.tif'] # Static
