@@ -28,7 +28,7 @@
 - Recomend to use Visual Studio Code : https://code.visualstudio.com/, for execcuting codes inside `config.py`. It is easy/handy to change between Python versions in VS Code. Spyder IDE can be used as well to excute the machine learning codes.
 - Changing Python versions apply only when you have acees to ArcGIS Desktop
 
-<!
+<!--
 ## **Notes**
 - Steps 2 and 3 are for supporting `arcpy` and `snappy` functionalites, concurrently, in Python 2.7.
 - To support all workflows simultaneously, installation of ArcGIS Pro is must and environemnt setup should be done correctly (see step 4). Howeever, you are strongly recommended to follow steps 1-3 as parameter for some tools between ArcGIS Desktop and Pro might differ and program might run into errors.
@@ -38,7 +38,7 @@
 - Once ENV is created, open Command Prompt and type `conda env list`. Conda should list all the availabe ENVs in your system along with the one you created.
 - Potentially, there could be **no ENV name** for your newly created/cloned environemnt within ArcGIS Pro. To give one, enter e.g. `conda create --name my_env_name --clone C:\Users\user_name\AppData\Local\ESRI\conda\envs\arcgispro-py3-clone1`. Now, if you type `conda env list` again in Command Prompt, your ENV with newly given ENV name should appear in the list. If it does, now activate ENV  with the command `conda activate my_evn_name`. If it succeded, an asterisk symbol should appear on the ENV name indicating that it is active/activated. Now, you should be able to install any module into the newly created ENV using the `conda` command. Refer: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 - Follow Step 3 for installing `snappy` package, except use Python 3 instead of Python 2. Install machine learning packages, too, as step 1.
->
+-->
 ## Possible Future Addition/Replacement
 
 - Replace `arcpy` with `gdal` package for supporting `Python 3` and above for all tasks in an open access manner.
