@@ -46,7 +46,7 @@
 
 ## Query/Support
 - Links here were provided to support you with relevant resources that I personally found useful while setting up proper and working environemnt.
-- If you have any trouble or question, be it setting up the environemnt correcly or running the code successfully, drop me an email: sw274@st-andrews.ac.uk
+- If you have any trouble or question, be it setting up the environemnt correcly or running the code successfully, drop me an email: s.wangchuk@vu.nl
 
 ## References
 
